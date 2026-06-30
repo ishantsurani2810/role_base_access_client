@@ -13,7 +13,7 @@ export const getAccessToken = () => {
 };
 
 export const api = axios.create({
-  baseURL: 'http://localhost:5000/api/v1',
+  baseURL: `${import.meta.env.VITE_BASE_URL}/api/v1`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
@@ -35,7 +35,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const { config: originalRequest, response } = error;
-    
+
     // Check if URL is an auth route (login, refresh, logout) to prevent recursive or masked failures
     const isAuthRequest = originalRequest && originalRequest.url && (
       originalRequest.url.includes('/auth/login') ||
@@ -61,7 +61,7 @@ api.interceptors.response.use(
       try {
         // Execute refresh endpoint
         const refreshResponse = await axios.post(
-          'http://localhost:5000/api/v1/auth/refresh',
+          `${import.meta.env.VITE_BASE_URL}/api/v1/auth/refresh`,
           {},
           { withCredentials: true }
         );
